@@ -1,0 +1,45 @@
+<DOCTYPE <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <title>Add note</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="css/notes.css" />
+    </head>
+
+    <body>
+        <header>
+            <div class="heading clearfix">
+                <nav>
+                    <ul class="menu">
+                        <li>
+                            <a href="notes.html"><img src="img/home.png" alt="notes"></a>
+                            <a href="index.html">Home</a>
+                        </li>
+                        <li>
+                            <a href="notes.html"><img src="img/notes.png" alt="notes"></a>
+                            <a href="notes.html">My notes</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="title">
+                <h1>
+                    Add your note
+                </h1>
+            </div>
+        </header>
+        <section class="input container">
+            <div class="adding">
+                <form action="/notes.html" method="POST">
+                    <p>Enter topic</p>
+                    <input name="topic" type="text" id="topic" placeholder="Topic" maxlength="25" spellcheck="false" autocomplete="off">
+                    <p>Enter note text</p>
+                    <textarea name="note" id="note" cols="30" rows="14" placeholder="Note" maxlength="396" spellcheck="false" required></textarea>
+                    <input type="submit" class="button submit" value="Save">
+                </form>
+            </div>
+        </section>
+    </body>
+
+    </html>

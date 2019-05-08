@@ -1,0 +1,213 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+    color: #222222;
+    background: url(../img/2.jpg) no-repeat center top / cover;
+}
+
+.clearfix:after {
+    content: '';
+    display: table;
+    width: 100%;
+    clear: both;
+}
+
+div {
+    box-sizing: border-box;
+}
+
+header {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.heading {
+    background: #fff5f5;
+}
+
+nav {
+    float: right;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.menu {
+    padding: 0;
+    margin: 0;
+    display: block;
+}
+
+.menu li {
+    float: left;
+    display: block;
+    margin-right: 45px;
+    font-size: 18px;
+}
+
+.menu li a {
+    color: #222222;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.menu img {
+    widows: 20px;
+    height: 20px;
+}
+
+.title {
+    padding-top: 40px;
+    margin-right: 45px;
+    margin-left: 45px;
+}
+
+.title h1 {
+    margin: 0;
+    padding-top: 100px;
+    padding: 0;
+    font-size: 70px;
+    display: inline;
+}
+
+.button {
+    float: right;
+    background: #fed136;
+    color: #222222;
+    border-radius: 3px;
+    display: block;
+    padding: 28px 0;
+    text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 18px;
+    width: 243px;
+    margin: 0;
+    margin-top: 0;
+    border: 0;
+}
+
+.container {
+    margin-left: 45px;
+    margin-top: 30px;
+}
+
+.notes {
+    display: inline;
+}
+
+.notes div {
+    padding: 10px 20px;
+    text-align: left;
+    color: #222222;
+    float: left;
+    margin-right: 20px;
+    background: #fff5f5;
+    height: 300px;
+    width: 300px;
+}
+
+input {
+    width: 300px;
+    color: #222222;   
+    outline-color: #C9C9C9;
+}
+
+textarea {
+    outline-color: #C9C9C9;
+}
+
+#note {
+    height: 300px;
+}
+
+.adding p {
+    color: #222222;
+    font-size: 22px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.register p {
+    text-align: center;
+    color: #222222;
+    font-size: 22px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+#topic {
+    display: block;
+    border: 0;
+    background: #fff5f5;
+    color: #222222;
+    padding: 10px 20px;
+}
+
+#login {
+    display: block;
+    border: 0;
+    background: #fff5f5;
+    color: #222222;
+    padding: 10px 20px;
+    margin: 0 auto;
+}
+
+#email {
+    display: block;
+    border: 0;
+    background: #fff5f5;
+    color: #222222;
+    padding: 10px 20px;
+    margin: 0 auto;
+}
+
+textarea {
+    font-size: 13px;
+    display: block;
+    border: 0;
+    background: #fff5f5;
+    color: #222222;
+    padding: 10px 20px;
+}
+
+#password {
+    font-size: 13px;
+    display: block;
+    border: 0;
+    background: #fff5f5;
+    color: #222222;
+    padding: 10px 20px;
+    margin: 0 auto;
+}
+
+.submit {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    float: left;
+    outline: none;
+    border: none;
+}
+
+.button:active {
+    background: #efb724;
+}
+
+#joinbutton {
+    margin-left: 730px;
+}
+
+.sign {
+    padding-top: 96px;
+}
+
+.noaccount {
+    padding: 0;
+    margin-top: 30px;
+    margin-right: 45px;
+    display: block;
+    /* font-size: 22px; */
+    float: right;
+    /* color: #222222; */
+}
