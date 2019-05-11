@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Notes</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="/css/notes.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/notes.css" />
 </head>
 
 <body>
@@ -39,6 +39,13 @@
     </section>
 
     <section class="container notes_container clearfix">
+        <div class="search">
+            <form action="/search" method="GET">
+                <input type="text" name="search_text" id="search_text" placeholder="Note" maxlength="25" spellcheck="false"
+                autocomplete="off">
+                <button type="submit" class="button_search">Search</button>
+            </form>
+        </div>
         <!--notes go here-->
     </section>
 

@@ -1,5 +1,6 @@
 package spark.bd;
 
+import java.awt.image.DataBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +75,22 @@ public class Dao {
                 return new Note(noteId, topic, text, importance, user_id);
             }
             return null;
+        });
+    }
+
+    public List<Note> getNotesBySearch(Long id, String search) {
+        List<Note> result = new ArrayList<>();
+        String sql = "SELECT n.* FROM notes AS n INNER JOIN my_users AS u ON n.user_id = u.id WHERE u.id = " + db.escapeSQL(id + "") + " AND (topic LIKE " + db.escapeSQL('%' + search + '%') + " OR text LIKE " + db.escapeSQL('%' + search + '%') + ");";
+        return db.executeQuery(sql, resultSet -> {
+            while (resultSet.next()) {
+                long noteId = resultSet.getLong("id");
+                String topic = resultSet.getString("topic");
+                String text = resultSet.getString("text");
+                long importance = resultSet.getLong("importance");
+                long user_id = resultSet.getLong("user_id");
+                result.add(new Note(noteId, topic, text, importance, user_id));
+            }
+            return result;
         });
     }
 

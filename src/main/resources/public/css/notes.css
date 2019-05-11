@@ -185,6 +185,21 @@ textarea {
     overflow-y: auto;
 }
 
+.search {
+    margin-bottom: 20px;
+}
+
+.search input {
+    display: inline;
+    margin: 0;
+    padding: 10px 20px;
+}
+
+#search_text {
+    margin-right: 16px;
+    /* width: 195px; */
+}
+
 .button {
     background: #fed136;
     color: #222222;
@@ -206,14 +221,35 @@ textarea {
     background: #efb724;
 }
 
+.button_sign {
+    float: right;
+}
+
 .button_add {
     margin-left: 0px;
     margin-top: 20px;
 }
 
 .button_notes {
-    float: right;
+    margin-left: 60%;
+    position: fixed;
     display: inline;
+}
+
+.button_search {
+    background: #C9C9C9;
+    color: #222222;
+    width: 100px;
+    border-radius: 3px;
+    display: inline;
+    padding: 10px 0;
+    margin: 0;
+    text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 13px;
+    border: 0;
 }
 
 ::-webkit-scrollbar{

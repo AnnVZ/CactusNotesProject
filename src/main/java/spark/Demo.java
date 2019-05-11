@@ -46,6 +46,13 @@ public class Demo {
         return body.replace("<!--notes go here-->", content);
     }
 
+    private static String setSearchedNotes(String body, String content, String search) {
+        String result = setNotes(body, content);
+        return result.replace("<input type=\"text\" name=\"search_text\" id=\"search_text\" placeholder=\"Note\" maxlength=\"25\" spellcheck=\"false\"\n" +
+                "                autocomplete=\"off\">", "<input type=\"text\" name=\"search_text\" id=\"search_text\" placeholder=\"Note\" maxlength=\"25\" spellcheck=\"false\"\n" +
+                "                autocomplete=\"off\" value=\"" + search + "\">");
+    }
+
     private static String changeNote(String body, String content) {
         return body.replace("<!--changing goes here -->", content);
     }
@@ -229,6 +236,35 @@ public class Demo {
             String noteIndex = request.params("index");
             dao.deleteNote(noteIndex);
             response.redirect("/notes");
+            return null;
+        });
+
+        get("/search", (request, response) -> {
+            String text = request.queryParams("search_text");
+            if (text.isEmpty())
+                response.redirect("/notes");
+            else {
+                List<Note> notes = dao.getNotesBySearch(getUserId(request), text);
+                if (notes.isEmpty()) {
+                    String content = "No notes found";
+                    return setSearchedNotes(getFileAsString("public/notes.html"), content, text);
+                }
+                else {
+                    String content = "";
+                    content += "<div class=\"notes_block\">\n";
+                    for (int i = notes.size() - 1; i >= 0; --i) {
+                        if (notes.get(i).getImportance() == 1)
+                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), notes.get(i).getId());
+                    }
+                    for (int i = notes.size() - 1; i >= 0; --i) {
+                        if (notes.get(i).getImportance() != 1)
+                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), notes.get(i).getId());
+                    }
+                    content += "</div>";
+                    response.type("text/html");
+                    return setSearchedNotes(getFileAsString("public/notes.html"), content, text);
+                }
+            }
             return null;
         });
     }
