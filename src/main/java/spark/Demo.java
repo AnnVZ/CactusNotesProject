@@ -8,6 +8,7 @@ import spark.bd.User;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static spark.Spark.*;
@@ -57,7 +58,7 @@ public class Demo {
         return body.replace("<!--changing goes here -->", content);
     }
 
-    private static String createDivNoteBody(String topic, String text, long importance, long index) {
+    private static String createDivNoteBody(String topic, String text, long importance, String datetime, long index) {
         String content = "";
         content += "<div class=\"note\">\n" +
                 "                <div class=\"note_head\">\n" +
@@ -65,22 +66,29 @@ public class Demo {
         if (topic != null)
             content += topic;
         content += "</p>\n" +
-                "                    <a href=\"/change/" + index + "\"><img src=\"img/change.jpg\" alt=\"change\" title=\"change\"></a>\n" +
-                "                    <a href=\"/mark/" + index + "\"><img src=\"img/";
+                "                    <a href=\"/change/" + index + "\" id=\"c" + index + "\"><img src=\"img/change.jpg\" alt=\"change\" title=\"change\"></a>\n" +
+                "                    <a href=\"/mark/" + index + "\" id=\"m" + index + "\"><img src=\"img/";
         if (importance == 1)
             content += "important.jpg";
         else
             content += "notimportant.jpg";
         content += "\" alt=\"importance\" title=\"mark\"></a>\n" +
-                "                    <a href=\"/delete/" + index + "\"><img src=\"img/delete.png\" alt=\"delete\" title=\"delete\"></a>\n" +
+                "                    <a href=\"/delete/" + index + "\" id=\"d" + index + "\"><img src=\"img/delete.png\" alt=\"delete\" title=\"delete\"></a>\n" +
                 "                </div>\n" +
                 "                <div class=\"note_text\">\n" +
                 "                    <p>";
-        content += text;
-        content += "</p>\n" +
-                "                </div>\n" +
+        content += text + "</p>";
+        if (!datetime.isEmpty())
+            content += "<p class=\"date\">" + datetime + "</p>";
+        content += "                </div>\n" +
                 "            </div>";
         return content;
+    }
+
+    private static String getDateTime() {
+        String day = String.valueOf(LocalDateTime.now()).substring(0, String.valueOf(LocalDateTime.now()).indexOf("T"));
+        String time = String.valueOf(LocalDateTime.now()).substring(String.valueOf(LocalDateTime.now()).indexOf("T") + 1, String.valueOf(LocalDateTime.now()).indexOf("T") + 6);
+        return day + " " + time;
     }
 
     private static void run() {
@@ -162,12 +170,20 @@ public class Demo {
             List<Note> notes = dao.getUserNotes(getUserId(request));
             content += "<div class=\"notes_block\">\n";
             for (int i = notes.size() - 1; i >= 0; --i) {
-                if (notes.get(i).getImportance() == 1)
-                    content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), notes.get(i).getId());
+                if (notes.get(i).getImportance() == 1) {
+                    String date = notes.get(i).getDatetime();
+                    if (date.equals("0"))
+                        date = "";
+                    content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getId());
+                }
             }
             for (int i = notes.size() - 1; i >= 0; --i) {
-                if (notes.get(i).getImportance() != 1)
-                    content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), notes.get(i).getId());
+                if (notes.get(i).getImportance() != 1) {
+                    String date = notes.get(i).getDatetime();
+                    if (date.equals("0"))
+                        date = "";
+                    content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getId());
+                }
             }
             content += "</div>";
             response.type("text/html");
@@ -182,7 +198,13 @@ public class Demo {
         post("/add", (request, response) -> {
             String topic = request.queryParams("topic");
             String note = request.queryParams("note");
-            dao.insertNote(topic, note, getUserId(request));
+            note = note.replace("\r\n", "<br>");
+            String datetime = request.queryParams("datetime");
+            if (datetime == null)
+                datetime = "";
+            else
+                datetime = getDateTime();
+            dao.insertNote(topic, note, datetime, getUserId(request));
             response.redirect("/notes");
             return null;
         });
@@ -192,6 +214,9 @@ public class Demo {
             Note currentNote = dao.getNote(Long.parseLong(noteIndex));
             String topic = currentNote.getTopic();
             String text = currentNote.getText();
+            String datetime = currentNote.getDatetime();
+            if (datetime.equals("0"))
+                datetime = "";
             String content = "<form action=\"/change/";
             content += noteIndex;
             content += "\" method=\"POST\">\n" +
@@ -204,7 +229,10 @@ public class Demo {
                     "                <textarea name=\"note\" id=\"note\" cols=\"30\" rows=\"14\" placeholder=\"Note\" maxlength=\"1000\"\n" +
                     "                    spellcheck=\"false\" required>";
             content += text;
-            content += "</textarea>\n" +
+            content += "</textarea><p><input type=\"checkbox\" name=\"datetime\" value=\"show\"";
+            if (datetime.length() > 0)
+                content += " checked";
+            content += ">show date and time</p>\n" +
                     "                <input type=\"submit\" class=\"button button_add\" value=\"Save\">\n" +
                     "            </form>";
             response.type("text/html");
@@ -215,8 +243,14 @@ public class Demo {
             String noteIndex = request.params("index");
             String topic = request.queryParams("topic");
             String text = request.queryParams("note");
+            String datetime = request.queryParams("datetime");
+            if (datetime == null)
+                datetime = "";
+            else
+                datetime = getDateTime();
             dao.updateNoteText(noteIndex, text);
             dao.updateNoteTopic(noteIndex, topic);
+            dao.updateNoteDate(noteIndex, datetime);
             response.redirect("/notes");
             return null;
         });
@@ -253,12 +287,20 @@ public class Demo {
                     String content = "";
                     content += "<div class=\"notes_block\">\n";
                     for (int i = notes.size() - 1; i >= 0; --i) {
-                        if (notes.get(i).getImportance() == 1)
-                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), notes.get(i).getId());
+                        if (notes.get(i).getImportance() == 1) {
+                            String date = notes.get(i).getDatetime();
+                            if (date.equals("0"))
+                                date = "";
+                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getId());
+                        }
                     }
                     for (int i = notes.size() - 1; i >= 0; --i) {
-                        if (notes.get(i).getImportance() != 1)
-                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), notes.get(i).getId());
+                        if (notes.get(i).getImportance() != 1) {
+                            String date = notes.get(i).getDatetime();
+                            if (date.equals("0"))
+                                date = "";
+                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getId());
+                        }
                     }
                     content += "</div>";
                     response.type("text/html");
@@ -271,7 +313,6 @@ public class Demo {
 
     public static void main(String[] args) {
         dao = new Dao(new Db());
-//        dao.insertUser("name", "", "123123");
         dao.createTables();
         run();
     }

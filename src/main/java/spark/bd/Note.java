@@ -5,16 +5,18 @@ public class Note {
     private String topic;
     private String text;
     private long importance;
+    private String datetime;
     private long userId;
 
     public Note() {
     }
 
-    public Note(long id, String topic, String text, long importance, long userId) {
+    public Note(long id, String topic, String text, long importance, String datetime, long userId) {
         this.id = id;
         this.topic = topic;
         this.text = text;
         this.importance = importance;
+        this.datetime = datetime;
         this.userId = userId;
     }
 
@@ -34,6 +36,10 @@ public class Note {
         return importance;
     }
 
+    public String getDatetime() {
+        return datetime;
+    }
+
     public long getUserId() {
         return userId;
     }
@@ -48,6 +54,10 @@ public class Note {
 
     public void setImportance(long importance) {
         this.importance = importance;
+    }
+
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
     }
 
     public void setUserId(long userId) {
