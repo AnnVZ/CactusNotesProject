@@ -1,45 +1,61 @@
-<DOCTYPE <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
-        <meta charset="utf-8" />
-        <title>Add note</title>
-        <link rel="stylesheet" type="text/css" media="screen" href="css/notes.css" />
-    </head>
+<head>
+    <meta charset="utf-8" />
+    <title>Add note</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/notes.css" />
+</head>
 
-    <body>
-        <header>
-            <div class="heading clearfix">
-                <nav>
-                    <ul class="menu">
-                        <li>
-                            <a href="notes.html"><img src="img/home.png" alt="notes"></a>
-                            <a href="index.html">Home</a>
-                        </li>
-                        <li>
-                            <a href="notes.html"><img src="img/notes.png" alt="notes"></a>
-                            <a href="notes.html">My notes</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div class="title">
-                <h1>
-                    Add your note
-                </h1>
-            </div>
-        </header>
-        <section class="input container">
-            <div class="adding">
-                <form action="/notes.html" method="POST">
-                    <p>Enter topic</p>
-                    <input name="topic" type="text" id="topic" placeholder="Topic" maxlength="25" spellcheck="false" autocomplete="off">
-                    <p>Enter note text</p>
-                    <textarea name="note" id="note" cols="30" rows="14" placeholder="Note" maxlength="396" spellcheck="false" required></textarea>
-                    <input type="submit" class="button submit" value="Save">
-                </form>
-            </div>
-        </section>
-    </body>
+<body>
+    <header class="heading clearfix">
+        <nav class="out">
+            <ul class="menu">
+                <li>
+                    <a href="/logout"><img src="/img/out.jpg" alt="notes"></a>
+                    <a href="/logout">Log out</a>
+                </li>
+            </ul>
+        </nav>
+        <nav>
+            <ul class="menu">
+                <li>
+                    <a href="index.html"><img src="/img/home.png" alt="notes"></a>
+                    <a href="index.html">Home</a>
+                </li>
+                <li>
+                    <a href="/notes"><img src="/img/notes.png" alt="notes"></a>
+                    <a href="/notes">My notes</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
 
-    </html>
+    <section class="title">
+        <h1>
+            Add your note
+        </h1>
+    </section>
+
+    <section class="container">
+        <div class="adding">
+            <form action="/add" method="POST">
+                <p>Enter topic</p>
+                <input name="topic" type="text" id="topic" placeholder="Topic" maxlength="25" spellcheck="false"
+                    autocomplete="off">
+                <p>Enter note text</p>
+                <textarea name="note" id="note" cols="30" rows="14" placeholder="Note" maxlength="1000"
+                    spellcheck="false" required></textarea>
+                <input type="submit" class="button button_add" value="Save">
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <a href="https://github.com/AnnVZ"><img src="/img/github_icon.png" alt="AnnVZ" title="AnnVZ" class="github"></a>
+        <br>made by <br>
+        Ann Zhlobich  <br>
+    </footer>
+</body>
+
+</html>

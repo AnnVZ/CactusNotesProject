@@ -1,49 +1,50 @@
-<DOCTYPE <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
-        <meta charset="utf-8" />
-        <title>Log in</title>
-        <link rel="stylesheet" type="text/css" media="screen" href="css/notes.css" />
-    </head>
+<head>
+    <meta charset="utf-8" />
+    <title>Log in</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/notes.css" />
+</head>
 
-    <body>
-        <header>
-            <div class="heading clearfix">
-                <nav>
-                    <ul class="menu">
-                        <li>
-                            <a href="notes.html"><img src="img/home.png" alt="notes"></a>
-                            <a href="index.html">Home</a>
-                        </li>
-                        <li>
-                            <a href="notes.html"><img src="img/notes.png" alt="notes"></a>
-                            <a href="notes.html">My notes</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div class="title noaccount">
-                <!-- <p>Still have no account?</p> -->
-                <a class="button" href="registration.html">Sign up</a>
-                <!-- <h1>
-                    Glad to see you again!
-                </h1> -->
-            </div>
-        </header>
-        <section class="input container sign">
-            <div class="register">
-                <form action="/notes" method="POST">
-                    <p>Name</p>
-                    <input name="login" type="text" id="login" maxlength="25" required spellcheck="false"
-                        autocomplete="off">
-                    <p>Password</p>
-                    <input name="password" type="password" id="password" maxlength="25" minlength="4" size="40" required
-                        autocomplete="off">
-                    <input type="submit" class="button submit" value="Log in" id="joinbutton">
-                </form>
-            </div>
-        </section>
-    </body>
+<body>
+    <header class="heading clearfix">
+        <nav>
+            <ul class="menu">
+                <li>
+                    <a href="index.html"><img src="/img/home.png" alt="notes"></a>
+                    <a href="index.html">Home</a>
+                </li>
+                <li>
+                    <a href="/notes"><img src="/img/notes.png" alt="notes"></a>
+                    <a href="/notes">My notes</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
 
-    </html>
+    <section class="title title_signin">
+        <a class="button button_notes" href="/registration">Sign up</a>
+    </section>
+    
+    <section class="input container sign">
+        <div class="register">
+            <form action="/login" method="POST">
+                <p>Name</p>
+                <input name="name" type="text" id="login" maxlength="25" required spellcheck="false" autocomplete="off">
+                <p>Password</p>
+                <input name="password" type="password" id="password" maxlength="25" minlength="4" size="40" required
+                    autocomplete="off">
+                <input type="submit" class="button submit" value="Log in" id="joinbutton">
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <a href="https://github.com/AnnVZ"><img src="/img/github_icon.png" alt="AnnVZ" title="AnnVZ" class="github"></a>
+        <br>made by <br>
+        Ann Zhlobich  <br>
+    </footer>
+</body>
+
+</html>
