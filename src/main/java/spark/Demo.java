@@ -145,7 +145,7 @@ public class Demo {
             User user = dao.getUser(name);
             if (user == null || !pass.equals(user.getPassword())) {
                 response.type("text/html");
-                return addScript(getFileAsString("public/signin.html"), "alert('Can not log in')");
+                return addScript(getFileAsString("public/signin.html"), "alert('Cannot log in')");
             } else {
                 setUserId(response, user.getId());
                 response.redirect("/notes");
