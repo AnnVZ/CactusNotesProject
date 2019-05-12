@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Add note</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="css/notes.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/notes.css" />
 </head>
 
 <body>
@@ -44,12 +44,70 @@
                 <input name="topic" type="text" id="topic" placeholder="Topic" maxlength="25" spellcheck="false"
                     autocomplete="off">
                 <p>Enter note text</p>
-                <textarea name="note" id="note" cols="30" rows="14" placeholder="Note" maxlength="1000"
-                    spellcheck="false" required></textarea>
-                <p><input type="checkbox" name="datetime" value="show">show date and time</p>
+                <div class="add chekbox-two type">
+                    <textarea name="note" id="note" cols="30" rows="14" placeholder="Note" maxlength="1000"
+                        spellcheck="false" required></textarea>
+                    <p>Type:</p>
+                    <div><label class="checkbox">
+                            <input type="radio" name="radio" value="work">
+                            <span class="checkbox__icon"></span>
+                            <img src="/img/work.png" alt="work" title="work">
+                            Work
+                        </label></div>
+                    <div><label class="checkbox">
+                            <input type="radio" name="radio" value="study">
+                            <span class="checkbox__icon"></span>
+                            <img src="/img/study.png" alt="work" title="work">
+                            Study
+                        </label></div>
+                    <div><label class="checkbox">
+                            <input type="radio" name="radio" value="sofa">
+                            <span class="checkbox__icon"></span>
+                            <img src="/img/sofa.png" alt="work" title="work">
+                            Home
+                        </label></div>
+                    <div><label class="checkbox">
+                            <input type="radio" name="radio" value="event">
+                            <span class="checkbox__icon"></span>
+                            <img src="/img/event.png" alt="work" title="work">
+                            Event
+                        </label></div>
+                    <div><label class="checkbox">
+                            <input type="radio" name="radio" value="shoplist">
+                            <span class="checkbox__icon"></span>
+                            <img src="/img/shoplist.png" alt="work" title="work">
+                            Shopping List
+                        </label></div>
+                    <div><label class="checkbox">
+                            <input type="radio" name="radio" value="recipe">
+                            <span class="checkbox__icon"></span>
+                            <img src="/img/recipe.png" alt="work" title="work">
+                            Recipe
+                        </label></div>
+                    <div><label class="checkbox">
+                            <input type="radio" name="radio" value="none" checked>
+                            <span class="checkbox__icon"></span>
+                            <span class="none">None</span>
+                        </label></div>
+                </div>
+                <div class="form chekbox-two">
+                    <label class="checkbox f"><input type="checkbox" name="datetime" value="show"><span
+                            class="checkbox__icon"></span>
+                        show date and time</label>
+                    <p>Format:</p>
+                    <label class="checkbox">
+                        <input type="radio" name="form" value="plain" checked>
+                        <span class="checkbox__icon"></span>
+                        Plain
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" name="form" value="list">
+                        <span class="checkbox__icon"></span>
+                        List
+                    </label>
+                </div>
                 <input type="submit" class="button button_add" value="Save">
             </form>
-        </div>
     </section>
 
     <footer>

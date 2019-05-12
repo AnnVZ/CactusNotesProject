@@ -116,6 +116,52 @@ textarea {
     resize: none;
 }
 
+.add {
+    height: 340px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.add textarea {
+    float: left;
+    margin-right: 50px;
+}
+
+.add p {
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+.add img {
+    height: 23px;
+    width: 23px;
+    margin-right: 5px;
+    margin-left: 10px;
+}
+
+.add div {
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+.none {
+    margin-left: 10px;
+}
+
+.type label {
+    font-size: 20px;
+}
+
+.form p {
+    margin-right: 20px;
+    display: inline;
+}
+
+.f {
+    margin-right: 15px;
+}
+
 .topic_change {
     height: 15px;
     overflow: auto;
@@ -142,6 +188,7 @@ textarea {
     color: #222222;
     float: left;
     background: #fff5f5;
+    /* background: url(../img/work_back.jpg) no-repeat center bottom / cover; */
     margin-right: 20px; 
     margin-bottom: 20px;
     height: 300px;
@@ -184,6 +231,12 @@ textarea {
     height: 232px;
     word-wrap: break-word;
     overflow-y: auto;
+}
+
+.type_image {
+    widows: 20px;
+    height: 20px;
+    margin-bottom: 10px;
 }
 
 .search {
@@ -267,7 +320,33 @@ input[type="checkbox"] {
     height: 19px;
     vertical-align: middle;
     cursor: pointer;
-    background: red;
+}
+
+input[type="radio"] {
+    border: 8px;
+    display: inline;
+    font-size: 10px;
+    margin: 0;
+    margin-right: 10px;
+    width: 17px;
+    height: 17px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.f {
+    margin-right: 168px;
+}
+
+label {
+    /* color: #a3a3a3; */
+    color: #222222;
+    font-size: 22px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-right: 25px;
+    display: inline;
+    cursor: pointer;
 }
 
 .date {
@@ -305,4 +384,47 @@ footer {
     padding: 0;
     width: 20px;
     height: 20px;
+}
+
+.chekbox-two .checkbox > input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.chekbox-two .checkbox > input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.checkbox__icon {
+    color: #bcbcbc;
+}
+
+input[type="checkbox"]:checked ~ .checkbox__icon {
+    color: #a3a3a3;
+}
+
+input[type="radio"]:checked ~ .checkbox__icon {
+    color: #a3a3a3;
+}
+
+.checkbox__icon:before {
+    font-family: "icons";
+}
+
+.icon--check:before,input[type="checkbox"]:checked ~ .checkbox__icon:before {
+    content: "\e601"
+}
+
+.icon--check:before,input[type="radio"]:checked ~ .checkbox__icon:before {
+    content: "\e601"
+}
+
+.icon--check-empty:before,.checkbox__icon:before {
+    content: "\e600"
+}
+
+@font-face {
+    font-family: "icons";
+    src: url(data:application/x-font-woff;charset=utf-8;base64,d09GRk9UVE8AAAR4AAoAAAAABDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDRkYgAAAA9AAAAPgAAAD4fZUAVE9TLzIAAAHsAAAAYAAAAGAIIvy3Y21hcAAAAkwAAABMAAAATBpVzFhnYXNwAAACmAAAAAgAAAAIAAAAEGhlYWQAAAKgAAAANgAAADYAeswzaGhlYQAAAtgAAAAkAAAAJAPiAedobXR4AAAC/AAAABgAAAAYBQAAAG1heHAAAAMUAAAABgAAAAYABlAAbmFtZQAAAxwAAAE5AAABOUQYtNZwb3N0AAAEWAAAACAAAAAgAAMAAAEABAQAAQEBCGljb21vb24AAQIAAQA6+BwC+BsD+BgEHgoAGVP/i4seCgAZU/+LiwwHi2v4lPh0BR0AAAB8Dx0AAACBER0AAAAJHQAAAO8SAAcBAQgPERMWGyBpY29tb29uaWNvbW9vbnUwdTF1MjB1RTYwMHVFNjAxAAACAYkABAAGAQEEBwoNL2X8lA78lA78lA77lA6L+HQVi/yU+JSLi/iU/JSLBd83Fffsi4v77Pvsi4v37AUOi/h0FYv8lPiUi4v33zc3i/s3++yLi/fs9zeL398F9wCFFftN+05JzUdI9xr7GveR95FHzwUO+JQU+JQViwwKAAMCAAGQAAUAAAFMAWYAAABHAUwBZgAAAPUAGQCEAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA5gEB4P/g/+AB4AAgAAAAAQAAAAAAAAAAAAAAIAAAAAAAAgAAAAMAAAAUAAMAAQAAABQABAA4AAAACgAIAAIAAgABACDmAf/9//8AAAAAACDmAP/9//8AAf/jGgQAAwABAAAAAAAAAAAAAAABAAH//wAPAAEAAAAAAACkYCfgXw889QALAgAAAAAAz65FuwAAAADPrkW7AAD/4AIAAeAAAAAIAAIAAAAAAAAAAQAAAeD/4AAAAgAAAAAAAgAAAQAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAABAAAAAgAAAAIAAAAAAFAAAAYAAAAAAA4ArgABAAAAAAABAA4AAAABAAAAAAACAA4ARwABAAAAAAADAA4AJAABAAAAAAAEAA4AVQABAAAAAAAFABYADgABAAAAAAAGAAcAMgABAAAAAAAKACgAYwADAAEECQABAA4AAAADAAEECQACAA4ARwADAAEECQADAA4AJAADAAEECQAEAA4AVQADAAEECQAFABYADgADAAEECQAGAA4AOQADAAEECQAKACgAYwBpAGMAbwBtAG8AbwBuAFYAZQByAHMAaQBvAG4AIAAxAC4AMABpAGMAbwBtAG8AbwBuaWNvbW9vbgBpAGMAbwBtAG8AbwBuAFIAZQBnAHUAbABhAHIAaQBjAG8AbQBvAG8AbgBHAGUAbgBlAHIAYQB0AGUAZAAgAGIAeQAgAEkAYwBvAE0AbwBvAG4AAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==) format("woff")
 }

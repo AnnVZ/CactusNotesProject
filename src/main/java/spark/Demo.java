@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import static spark.Spark.*;
 
@@ -58,7 +59,7 @@ public class Demo {
         return body.replace("<!--changing goes here -->", content);
     }
 
-    private static String createDivNoteBody(String topic, String text, long importance, String datetime, long index) {
+    private static String createDivNoteBody(String topic, String text, long importance, String datetime, String form, String type, long index) {
         String content = "";
         content += "<div class=\"note\">\n" +
                 "                <div class=\"note_head\">\n" +
@@ -77,7 +78,15 @@ public class Demo {
                 "                </div>\n" +
                 "                <div class=\"note_text\">\n" +
                 "                    <p>";
-        content += text + "</p>";
+        if (form.equals("list")) {
+            content += "• ";
+            content += text.replace("<br>", "<br>• ");
+        } else
+            content += text;
+        content += "</p>";
+        if (!type.equals("none")) {
+            content += "<img src=\"img/" + type + ".png\" alt=\"type\" class=\"type_image\">";
+        }
         if (!datetime.isEmpty())
             content += "<p class=\"date\">" + datetime + "</p>";
         content += "                </div>\n" +
@@ -174,7 +183,7 @@ public class Demo {
                     String date = notes.get(i).getDatetime();
                     if (date.equals("0"))
                         date = "";
-                    content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getId());
+                    content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getForm(), notes.get(i).getType(), notes.get(i).getId());
                 }
             }
             for (int i = notes.size() - 1; i >= 0; --i) {
@@ -182,7 +191,7 @@ public class Demo {
                     String date = notes.get(i).getDatetime();
                     if (date.equals("0"))
                         date = "";
-                    content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getId());
+                    content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getForm(), notes.get(i).getType(), notes.get(i).getId());
                 }
             }
             content += "</div>";
@@ -200,11 +209,13 @@ public class Demo {
             String note = request.queryParams("note");
             note = note.replace("\r\n", "<br>");
             String datetime = request.queryParams("datetime");
+            String form = request.queryParams("form");
+            String type = request.queryParams("radio");
             if (datetime == null)
                 datetime = "";
             else
                 datetime = getDateTime();
-            dao.insertNote(topic, note, datetime, getUserId(request));
+            dao.insertNote(topic, note, datetime, form, type, getUserId(request));
             response.redirect("/notes");
             return null;
         });
@@ -228,6 +239,7 @@ public class Demo {
                     "                <p>Change note text</p>\n" +
                     "                <textarea name=\"note\" id=\"note\" cols=\"30\" rows=\"14\" placeholder=\"Note\" maxlength=\"1000\"\n" +
                     "                    spellcheck=\"false\" required>";
+            text = text.replace("<br>", "\r\n");
             content += text;
             content += "</textarea><p><input type=\"checkbox\" name=\"datetime\" value=\"show\"";
             if (datetime.length() > 0)
@@ -243,6 +255,7 @@ public class Demo {
             String noteIndex = request.params("index");
             String topic = request.queryParams("topic");
             String text = request.queryParams("note");
+            text = text.replace("\r\n", "<br>");
             String datetime = request.queryParams("datetime");
             if (datetime == null)
                 datetime = "";
@@ -282,8 +295,7 @@ public class Demo {
                 if (notes.isEmpty()) {
                     String content = "No notes found";
                     return setSearchedNotes(getFileAsString("public/notes.html"), content, text);
-                }
-                else {
+                } else {
                     String content = "";
                     content += "<div class=\"notes_block\">\n";
                     for (int i = notes.size() - 1; i >= 0; --i) {
@@ -291,7 +303,7 @@ public class Demo {
                             String date = notes.get(i).getDatetime();
                             if (date.equals("0"))
                                 date = "";
-                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getId());
+                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getForm(), notes.get(i).getType(), notes.get(i).getId());
                         }
                     }
                     for (int i = notes.size() - 1; i >= 0; --i) {
@@ -299,7 +311,7 @@ public class Demo {
                             String date = notes.get(i).getDatetime();
                             if (date.equals("0"))
                                 date = "";
-                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getId());
+                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getForm(), notes.get(i).getType(), notes.get(i).getId());
                         }
                     }
                     content += "</div>";

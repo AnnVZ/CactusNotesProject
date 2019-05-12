@@ -15,7 +15,7 @@ public class Dao {
 //        db.executeUpdate("DROP TABLE IF EXISTS my_users;");
 //        db.executeUpdate("DROP TABLE IF EXISTS notes;");
         db.executeUpdate("CREATE TABLE IF NOT EXISTS my_users(id IDENTITY(1,1) NOT NULL PRIMARY KEY, name VARCHAR(30) NOT NULL UNIQUE, email VARCHAR(30) UNIQUE, password VARCHAR(30) NOT NULL);");
-        db.executeUpdate("CREATE TABLE IF NOT EXISTS notes(id IDENTITY NOT NULL PRIMARY KEY, topic VARCHAR(25), text VARCHAR(1000) NOT NULL, importance BIGINT NOT NULL, datetime VARCHAR(20), user_id BIGINT NOT NULL);");
+        db.executeUpdate("CREATE TABLE IF NOT EXISTS notes(id IDENTITY NOT NULL PRIMARY KEY, topic VARCHAR(25), text VARCHAR(1000) NOT NULL, importance BIGINT NOT NULL, datetime VARCHAR(20), form VARCHAR(10) NOT NULL, type VARCHAR(20) NOT NULL, user_id BIGINT NOT NULL);");
         db.executeUpdate("ALTER TABLE IF EXISTS notes ADD CONSTRAINT IF NOT EXISTS fk_user_id FOREIGN KEY (user_id) REFERENCES my_users(id) ON DELETE CASCADE;");
     }
 
@@ -26,14 +26,14 @@ public class Dao {
             db.executeUpdate("INSERT INTO my_users (name, email, password) VALUES (" + db.escapeSQL(name) + ", " + db.escapeSQL(email) + ", " + db.escapeSQL(password) + ");");
     }
 
-    public void insertNote(String topic, String text, String datetime, long userId) {
+    public void insertNote(String topic, String text, String datetime, String form, String type, long userId) {
         String date = datetime;
         if (datetime.isEmpty())
             date = "0";
         if (topic.length() == 0)
-            db.executeUpdate("INSERT INTO notes (text, importance, datetime, user_id) VALUES (" + db.escapeSQL(text) + ", 0, " + db.escapeSQL(date) + ", " + userId + ");");
+            db.executeUpdate("INSERT INTO notes (text, importance, datetime, form, type, user_id) VALUES (" + db.escapeSQL(text) + ", 0, " + db.escapeSQL(date) + ", " + db.escapeSQL(form) + ", " + db.escapeSQL(type) + ", " + userId + ");");
         else
-            db.executeUpdate("INSERT INTO notes (topic, text, importance, datetime, user_id) VALUES (" + db.escapeSQL(topic) + ", " + db.escapeSQL(text) + ", 0, " +  db.escapeSQL(date) + ", " + userId + ");");
+            db.executeUpdate("INSERT INTO notes (topic, text, importance, datetime, form, type, user_id) VALUES (" + db.escapeSQL(topic) + ", " + db.escapeSQL(text) + ", 0, " +  db.escapeSQL(date) + ", " + db.escapeSQL(form) + ", " + db.escapeSQL(type) + ", " + userId + ");");
     }
 
     public void deleteNote(String noteId) {
@@ -79,8 +79,10 @@ public class Dao {
                 String text = resultSet.getString("text");
                 long importance = resultSet.getLong("importance");
                 String datetime = resultSet.getString("datetime");
+                String form = resultSet.getString("form");
+                String type = resultSet.getString("type");
                 long user_id = resultSet.getLong("user_id");
-                return new Note(noteId, topic, text, importance, datetime, user_id);
+                return new Note(noteId, topic, text, importance, datetime, form, type, user_id);
             }
             return null;
         });
@@ -96,8 +98,10 @@ public class Dao {
                 String text = resultSet.getString("text");
                 long importance = resultSet.getLong("importance");
                 String datetime = resultSet.getString("datetime");
+                String form = resultSet.getString("form");
+                String type = resultSet.getString("type");
                 long user_id = resultSet.getLong("user_id");
-                result.add(new Note(noteId, topic, text, importance, datetime, user_id));
+                result.add(new Note(noteId, topic, text, importance, datetime, form, type, user_id));
             }
             return result;
         });
@@ -113,8 +117,10 @@ public class Dao {
                 String text = resultSet.getString("text");
                 long importance = resultSet.getLong("importance");
                 String datetime = resultSet.getString("datetime");
+                String form = resultSet.getString("form");
+                String type = resultSet.getString("type");
                 long user_id = resultSet.getLong("user_id");
-                result.add(new Note(noteId, topic, text, importance, datetime, user_id));
+                result.add(new Note(noteId, topic, text, importance, datetime, form, type, user_id));
             }
             return result;
         });

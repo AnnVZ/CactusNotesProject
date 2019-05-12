@@ -6,17 +6,21 @@ public class Note {
     private String text;
     private long importance;
     private String datetime;
+    private String form;
+    private String type;
     private long userId;
 
     public Note() {
     }
 
-    public Note(long id, String topic, String text, long importance, String datetime, long userId) {
+    public Note(long id, String topic, String text, long importance, String datetime, String form, String type, long userId) {
         this.id = id;
         this.topic = topic;
         this.text = text;
         this.importance = importance;
         this.datetime = datetime;
+        this.form = form;
+        this.type = type;
         this.userId = userId;
     }
 
@@ -40,6 +44,14 @@ public class Note {
         return datetime;
     }
 
+    public String getForm() {
+        return form;
+    }
+
+    public String getType() {
+        return type;
+    }
+
     public long getUserId() {
         return userId;
     }
@@ -58,6 +70,14 @@ public class Note {
 
     public void setDatetime(String datetime) {
         this.datetime = datetime;
+    }
+
+    public void setForm(String form) {
+        this.form = form;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setUserId(long userId) {
