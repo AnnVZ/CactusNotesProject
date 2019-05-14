@@ -162,6 +162,10 @@ textarea {
     margin-right: 15px;
 }
 
+.margin {
+    margin-top: 30px;
+}
+
 .topic_change {
     height: 15px;
     overflow: auto;

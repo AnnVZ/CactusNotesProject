@@ -26,6 +26,11 @@ public class Dao {
             db.executeUpdate("INSERT INTO my_users (name, email, password) VALUES (" + db.escapeSQL(name) + ", " + db.escapeSQL(email) + ", " + db.escapeSQL(password) + ");");
     }
 
+    public void deleteUser(String id) {
+        db.executeUpdate("DELETE FROM my_users WHERE id = " + db.escapeSQL(id) + ";");
+        db.executeUpdate("DELETE FROM notes WHERE user_id = " + db.escapeSQL(id) + ";");
+    }
+
     public void insertNote(String topic, String text, String datetime, String form, String type, long userId) {
         String date = datetime;
         if (datetime.isEmpty())
@@ -67,6 +72,20 @@ public class Dao {
                return new User(id, currentUserName, email, password);
            }
            return null;
+        });
+    }
+
+    public User getUser(long id) {
+        String sql = "SELECT * FROM my_users WHERE id = " + db.escapeSQL(id + "") + ";";
+        return db.executeQuery(sql, resultSet -> {
+            if (resultSet.first()) {
+                long currentId = resultSet.getLong("id");
+                String currentUserName = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
+                return new User(currentId, currentUserName, email, password);
+            }
+            return null;
         });
     }
 

@@ -52,8 +52,6 @@ public class Demo {
 
     private static String getFileAsString(String filename) {
         try {
-//            Resources.toString(Resources.getResource(filename), Charsets.UTF_8);
-//            return new String(Files.readAllBytes(Paths.get(Demo.class.getClassLoader().getResource(filename).getFile())));
             return new String(Files.readAllBytes(Paths.get("src/main/resources/" + filename)));
         } catch (IOException e) {
             return null;
@@ -163,7 +161,14 @@ public class Demo {
         };
 
         before("/notes", onlyForUsers);
+        before("/notes_new", onlyForUsers);
         before("/add", onlyForUsers);
+        before("/change/:index", onlyForUsers);
+        before("/delete/:index", onlyForUsers);
+        before("/mark/:index", onlyForUsers);
+        before("/filter", onlyForUsers);
+        before("/search", onlyForUsers);
+        before("/logout", onlyForUsers);
         before("/login", onlyForAnons);
         before("/register", onlyForAnons);
 
@@ -200,9 +205,14 @@ public class Demo {
             String name = request.queryParams("name");
             String pass = request.queryParams("password");
             User user = dao.getUser(name);
-            if (user == null || !pass.equals(user.getPassword())) {
+            if (user == null) {
                 response.type("text/html");
-                return addScript(getFileAsString("public/signin.html"), "alert('Cannot log in')");
+                return addScript(getFileAsString("public/signin.html"), "alert('Such user does not exist')");
+            }
+
+            if (!pass.equals(user.getPassword())) {
+                response.type("text/html");
+                return addScript(getFileAsString("public/signin.html"), "alert('Wrong password entered')");
             } else {
                 setUserId(response, user.getId());
                 response.redirect("/notes");
@@ -221,7 +231,11 @@ public class Demo {
             String name = request.queryParams("reg_login");
             String email = request.queryParams("reg_email");
             String pass = request.queryParams("reg_password");
-            if (dao.getUser(name) != null || name.length() == 0 || pass.length() == 0) {
+            if (dao.getUser(name) != null) {
+                response.type("text/html");
+                return addScript(getFileAsString("public/registration.html"), "alert('User with the same name already exists')");
+            }
+            if (name.length() == 0 || pass.length() == 0) {
                 response.type("text/html");
                 return addScript(getFileAsString("public/registration.html"), "alert('Cannot sign up')");
             } else {
@@ -328,7 +342,7 @@ public class Demo {
                 datetime = "";
             String content = "<form action=\"/change/";
             content += noteIndex;
-            content += "\" method=\"POST\">\n" +
+            content += "\" method=\"POST\" class=\"chekbox-two\">\n" +
                     "                <p>Edit topic</p>\n" +
                     "                <textarea name=\"topic\" id=\"topic\" class=\"topic_change\" cols=\"30\" rows=\"1\" placeholder=\"Topic\" maxlength=\"25\" spellcheck=\"false\" autocomplete=\"off\">";
             if (topic != null)
@@ -339,10 +353,12 @@ public class Demo {
                     "                    spellcheck=\"false\" required>";
             text = text.replace("<br>", "\r\n");
             content += text;
-            content += "</textarea><p><input type=\"checkbox\" name=\"datetime\" value=\"show\"";
+            content += "</textarea><div class=\"form chekbox-two margin\">\n" +
+                    "                    <label class=\"checkbox f\"><input type=\"checkbox\" name=\"datetime\" value=\"show\"";
             if (datetime.length() > 0)
                 content += " checked";
-            content += ">show date and time</p>\n" +
+            content += "><span class=\"checkbox__icon\"></span>" +
+                    "   show date and time</label></div>\n" +
                     "                <input type=\"submit\" class=\"button button_add\" value=\"Save\">\n" +
                     "            </form>";
             response.type("text/html");
@@ -425,6 +441,15 @@ public class Demo {
     public static void main(String[] args) {
         dao = new Dao(new Db());
         dao.createTables();
+//        User user = dao.getUser(1);
+//        if (user != null) {
+//            System.out.println("exists");
+//        }
+//        dao.deleteUser("1");
+//        User user1 = dao.getUser(1);
+//        if (user1 != null) {
+//            System.out.println("exists");
+//        }
         run();
     }
 }
