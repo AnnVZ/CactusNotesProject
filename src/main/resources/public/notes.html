@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Notes</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="css/notes.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/notes.css" />
 </head>
 
 <body>
@@ -20,12 +20,12 @@
         <nav>
             <ul class="menu">
                 <li>
-                    <a href="index.html"><img src="/img/home.png" alt="notes"></a>
-                    <a href="index.html">Home</a>
+                    <a href="/index"><img src="/img/home.png" alt="notes"></a>
+                    <a href="/index">Home</a>
                 </li>
                 <li>
-                    <a href="/notes"><img src="/img/notes.png" alt="notes"></a>
-                    <a href="/notes">My notes</a>
+                    <a href="/notes_new"><img src="/img/notes.png" alt="notes"></a>
+                    <a href="/notes_new">My notes</a>
                 </li>
             </ul>
         </nav>
@@ -40,10 +40,36 @@
 
     <section class="container notes_container clearfix">
         <div class="search">
-            <form action="/search" method="GET">
-                <input type="text" name="search_text" id="search_text" placeholder="Note" maxlength="25" spellcheck="false"
-                autocomplete="off">
-                <button type="submit" class="button_search">Search</button>
+            <form action="/search" method="GET" class="filter">
+                <input type="text" name="search_text" id="search_text" placeholder="Search" maxlength="25"
+                    spellcheck="false" autocomplete="off">
+                <button type="submit" class="button_search"><img src="/img/search.png" alt=""></button>
+            </form>
+            <form action="/filter" method="GET" class="add chekbox-two type filter filter_left">
+                <div><label class="checkbox">
+                        <input type="checkbox" name="filter_work" value="work" onchange='this.form.submit()'>
+                        <img src="/img/work_png.png" alt="work" title="Work">
+                    </label></div>
+                <div><label class="checkbox">
+                        <input type="checkbox" name="filter_study" value="study" onchange='this.form.submit()'>
+                        <img src="/img/study_png.png" alt="work" title="Study">
+                    </label></div>
+                <div><label class="checkbox">
+                        <input type="checkbox" name="filter_sofa" value="sofa" onchange='this.form.submit()'>
+                        <img src="/img/sofa_png.png" alt="work" title="Home">
+                    </label></div>
+                <div><label class="checkbox">
+                        <input type="checkbox" name="filter_event" value="event" onchange='this.form.submit()'>
+                        <img src="/img/event_png.png" alt="work" title="Event">
+                    </label></div>
+                <div><label class="checkbox">
+                        <input type="checkbox" name="filter_shoplist" value="shoplist" onchange='this.form.submit()'>
+                        <img src="/img/shoplist_png.png" alt="work" title="Shopping List">
+                    </label></div>
+                <div><label class="checkbox">
+                        <input type="checkbox" name="filter_recipe" value="recipe" onchange='this.form.submit()'>
+                        <img src="/img/recipe_png.png" alt="work" title="Recipe">
+                    </label></div>
             </form>
         </div>
         <!--notes go here-->
@@ -52,7 +78,7 @@
     <footer>
         <a href="https://github.com/AnnVZ"><img src="/img/github_icon.png" alt="AnnVZ" title="AnnVZ" class="github"></a>
         <br>made by <br>
-        Ann Zhlobich  <br>
+        Ann Zhlobich <br>
     </footer>
 </body>
 

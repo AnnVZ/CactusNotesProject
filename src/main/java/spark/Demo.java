@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.function.Predicate;
 
 import static spark.Spark.*;
 
@@ -26,8 +28,26 @@ public class Demo {
         return Long.valueOf(userId);
     }
 
+    private static String getUserSearch(Request request) {
+        String userSearch = request.cookie("userSearch");
+        return userSearch;
+    }
+
+    private static String getUserTypes(Request request) {
+        String userTypes = request.cookie("userTypes");
+        return userTypes;
+    }
+
     private static void setUserId(Response response, long id) {
         response.cookie("userId", id + "");
+    }
+
+    private static void setUserSearch(Response response, String search) {
+        response.cookie("userSearch", search);
+    }
+
+    private static void setUserTypes(Response response, String types) {
+        response.cookie("userTypes", types);
     }
 
     private static String getFileAsString(String filename) {
@@ -48,11 +68,35 @@ public class Demo {
         return body.replace("<!--notes go here-->", content);
     }
 
-    private static String setSearchedNotes(String body, String content, String search) {
-        String result = setNotes(body, content);
-        return result.replace("<input type=\"text\" name=\"search_text\" id=\"search_text\" placeholder=\"Note\" maxlength=\"25\" spellcheck=\"false\"\n" +
-                "                autocomplete=\"off\">", "<input type=\"text\" name=\"search_text\" id=\"search_text\" placeholder=\"Note\" maxlength=\"25\" spellcheck=\"false\"\n" +
-                "                autocomplete=\"off\" value=\"" + search + "\">");
+    private static String setSearch(String body, String search) {
+        return body.replace("<input type=\"text\" name=\"search_text\" id=\"search_text\" placeholder=\"Search\" maxlength=\"25\"\n" +
+                "                    spellcheck=\"false\" autocomplete=\"off\">", "<input type=\"text\" name=\"search_text\" id=\"search_text\" placeholder=\"Search\" maxlength=\"25\"\n" +
+                "                    spellcheck=\"false\" autocomplete=\"off\" value=\"" + search + "\">");
+    }
+
+    private static String setTypes(String body, String types) {
+        if (types.equals("0"))
+            return body;
+        String result = body;
+        if (types.contains("work")) {
+            result = result.replace("<input type=\"checkbox\" name=\"filter_work\" value=\"work\" onchange='this.form.submit()'>", "<input type=\"checkbox\" name=\"filter_work\" value=\"work\" onchange='this.form.submit()' checked>");
+        }
+        if (types.contains("study")) {
+            result = result.replace("<input type=\"checkbox\" name=\"filter_study\" value=\"study\" onchange='this.form.submit()'>", "<input type=\"checkbox\" name=\"filter_study\" value=\"study\" onchange='this.form.submit()' checked>");
+        }
+        if (types.contains("sofa")) {
+            result = result.replace("<input type=\"checkbox\" name=\"filter_sofa\" value=\"sofa\" onchange='this.form.submit()'>", "<input type=\"checkbox\" name=\"filter_sofa\" value=\"sofa\" onchange='this.form.submit()' checked>");
+        }
+        if (types.contains("event")) {
+            result = result.replace("<input type=\"checkbox\" name=\"filter_event\" value=\"event\" onchange='this.form.submit()'>", "<input type=\"checkbox\" name=\"filter_event\" value=\"event\" onchange='this.form.submit()' checked>");
+        }
+        if (types.contains("shoplist")) {
+            result = result.replace("<input type=\"checkbox\" name=\"filter_shoplist\" value=\"shoplist\" onchange='this.form.submit()'>", "<input type=\"checkbox\" name=\"filter_shoplist\" value=\"shoplist\" onchange='this.form.submit()' checked>");
+        }
+        if (types.contains("recipe")) {
+            result = result.replace("<input type=\"checkbox\" name=\"filter_recipe\" value=\"recipe\" onchange='this.form.submit()'>", "<input type=\"checkbox\" name=\"filter_recipe\" value=\"recipe\" onchange='this.form.submit()' checked>");
+        }
+        return result;
     }
 
     private static String changeNote(String body, String content) {
@@ -67,14 +111,14 @@ public class Demo {
         if (topic != null)
             content += topic;
         content += "</p>\n" +
-                "                    <a href=\"/change/" + index + "\" id=\"c" + index + "\"><img src=\"img/change.jpg\" alt=\"change\" title=\"change\"></a>\n" +
+                "                    <a href=\"/change/" + index + "\" id=\"c" + index + "\"><img src=\"img/change.jpg\" alt=\"change\" title=\"Edit\"></a>\n" +
                 "                    <a href=\"/mark/" + index + "\" id=\"m" + index + "\"><img src=\"img/";
         if (importance == 1)
             content += "important.jpg";
         else
             content += "notimportant.jpg";
-        content += "\" alt=\"importance\" title=\"mark\"></a>\n" +
-                "                    <a href=\"/delete/" + index + "\" id=\"d" + index + "\"><img src=\"img/delete.png\" alt=\"delete\" title=\"delete\"></a>\n" +
+        content += "\" alt=\"importance\" title=\"Mark\"></a>\n" +
+                "                    <a href=\"/delete/" + index + "\" id=\"d" + index + "\"><img src=\"img/delete.png\" alt=\"delete\" title=\"Delete\"></a>\n" +
                 "                </div>\n" +
                 "                <div class=\"note_text\">\n" +
                 "                    <p>";
@@ -124,17 +168,30 @@ public class Demo {
         before("/register", onlyForAnons);
 
         get("/", (request, response) -> {
+            response.removeCookie("userTypes");
+            response.removeCookie("userSearch");
+            response.redirect("index.html");
+            return null;
+        });
+
+        get("/index", (request, response) -> {
+            response.removeCookie("userTypes");
+            response.removeCookie("userSearch");
             response.redirect("index.html");
             return null;
         });
 
         get("/logout", (request, response) -> {
             response.removeCookie("userId");
+            response.removeCookie("userSearch");
+            response.removeCookie("userTypes");
             response.redirect("signin.html");
             return null;
         });
 
         get("/login", (request, response) -> {
+            response.removeCookie("userTypes");
+            response.removeCookie("userSearch");
             response.redirect("signin.html");
             return null;
         });
@@ -154,6 +211,8 @@ public class Demo {
         });
 
         get("/registration", (request, response) -> {
+            response.removeCookie("userTypes");
+            response.removeCookie("userSearch");
             response.redirect("registration.html");
             return null;
         });
@@ -174,32 +233,69 @@ public class Demo {
             }
         });
 
+        get("/notes_new", (request, response) -> {
+            response.removeCookie("userTypes");
+            response.removeCookie("userSearch");
+            response.redirect("/notes");
+            return null;
+        });
+
         get("/notes", (request, response) -> {
+            String returnValue = getFileAsString("public/notes.html");
+            if (getUserSearch(request) != null) {
+                returnValue = setSearch(returnValue, getUserSearch(request));
+            }
+            if (getUserTypes(request) != null) {
+                returnValue = setTypes(returnValue, getUserTypes(request));
+            }
             String content = "";
             List<Note> notes = dao.getUserNotes(getUserId(request));
-            content += "<div class=\"notes_block\">\n";
-            for (int i = notes.size() - 1; i >= 0; --i) {
-                if (notes.get(i).getImportance() == 1) {
-                    String date = notes.get(i).getDatetime();
-                    if (date.equals("0"))
-                        date = "";
-                    content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getForm(), notes.get(i).getType(), notes.get(i).getId());
+            if (notes.size() == 0) {
+                content = "No notes found";
+            } else {
+                if (getUserSearch(request) != null) {
+                    notes.clear();
+                    notes = dao.getNotesBySearch(getUserId(request), getUserSearch(request));
+                }
+                if (getUserTypes(request) != null) {
+                    List<Note> notesToDelete = new ArrayList<>();
+                    for (Note note : notes) {
+                        if (!getUserTypes(request).contains(note.getType())) {
+                            notesToDelete.add(note);
+                        }
+                    }
+                    notes.removeAll(notesToDelete);
+                }
+                if (notes.size() == 0) {
+                    content = "No notes found";
+                } else {
+                    content += "<div class=\"notes_block\">\n";
+                    for (int i = notes.size() - 1; i >= 0; --i) {
+                        if (notes.get(i).getImportance() == 1) {
+                            String date = notes.get(i).getDatetime();
+                            if (date.equals("0"))
+                                date = "";
+                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getForm(), notes.get(i).getType(), notes.get(i).getId());
+                        }
+                    }
+                    for (int i = notes.size() - 1; i >= 0; --i) {
+                        if (notes.get(i).getImportance() != 1) {
+                            String date = notes.get(i).getDatetime();
+                            if (date.equals("0"))
+                                date = "";
+                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getForm(), notes.get(i).getType(), notes.get(i).getId());
+                        }
+                    }
+                    content += "</div>";
                 }
             }
-            for (int i = notes.size() - 1; i >= 0; --i) {
-                if (notes.get(i).getImportance() != 1) {
-                    String date = notes.get(i).getDatetime();
-                    if (date.equals("0"))
-                        date = "";
-                    content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getForm(), notes.get(i).getType(), notes.get(i).getId());
-                }
-            }
-            content += "</div>";
             response.type("text/html");
-            return setNotes(getFileAsString("public/notes.html"), content);
+            return setNotes(returnValue, content);
         });
 
         get("/add", (request, response) -> {
+            response.removeCookie("userTypes");
+            response.removeCookie("userSearch");
             response.redirect("add.html");
             return null;
         });
@@ -221,6 +317,8 @@ public class Demo {
         });
 
         get("/change/:index", (request, response) -> {
+            response.removeCookie("userTypes");
+            response.removeCookie("userSearch");
             String noteIndex = request.params("index");
             Note currentNote = dao.getNote(Long.parseLong(noteIndex));
             String topic = currentNote.getTopic();
@@ -231,12 +329,12 @@ public class Demo {
             String content = "<form action=\"/change/";
             content += noteIndex;
             content += "\" method=\"POST\">\n" +
-                    "                <p>Change topic</p>\n" +
+                    "                <p>Edit topic</p>\n" +
                     "                <textarea name=\"topic\" id=\"topic\" class=\"topic_change\" cols=\"30\" rows=\"1\" placeholder=\"Topic\" maxlength=\"25\" spellcheck=\"false\" autocomplete=\"off\">";
             if (topic != null)
                 content += topic;
             content += "</textarea>\n" +
-                    "                <p>Change note text</p>\n" +
+                    "                <p>Edit note text</p>\n" +
                     "                <textarea name=\"note\" id=\"note\" cols=\"30\" rows=\"14\" placeholder=\"Note\" maxlength=\"1000\"\n" +
                     "                    spellcheck=\"false\" required>";
             text = text.replace("<br>", "\r\n");
@@ -287,38 +385,39 @@ public class Demo {
         });
 
         get("/search", (request, response) -> {
-            String text = request.queryParams("search_text");
-            if (text.isEmpty())
-                response.redirect("/notes");
-            else {
-                List<Note> notes = dao.getNotesBySearch(getUserId(request), text);
-                if (notes.isEmpty()) {
-                    String content = "No notes found";
-                    return setSearchedNotes(getFileAsString("public/notes.html"), content, text);
-                } else {
-                    String content = "";
-                    content += "<div class=\"notes_block\">\n";
-                    for (int i = notes.size() - 1; i >= 0; --i) {
-                        if (notes.get(i).getImportance() == 1) {
-                            String date = notes.get(i).getDatetime();
-                            if (date.equals("0"))
-                                date = "";
-                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getForm(), notes.get(i).getType(), notes.get(i).getId());
-                        }
-                    }
-                    for (int i = notes.size() - 1; i >= 0; --i) {
-                        if (notes.get(i).getImportance() != 1) {
-                            String date = notes.get(i).getDatetime();
-                            if (date.equals("0"))
-                                date = "";
-                            content += createDivNoteBody(notes.get(i).getTopic(), notes.get(i).getText(), notes.get(i).getImportance(), date, notes.get(i).getForm(), notes.get(i).getType(), notes.get(i).getId());
-                        }
-                    }
-                    content += "</div>";
-                    response.type("text/html");
-                    return setSearchedNotes(getFileAsString("public/notes.html"), content, text);
-                }
-            }
+            String search = request.queryParams("search_text");
+            if (search.isEmpty())
+                response.removeCookie("userSearch");
+            else
+                setUserSearch(response, search);
+            response.redirect("/notes");
+            return null;
+        });
+
+        get("/filter", (request, response) -> {
+            response.removeCookie("userTypes");
+            String filterWork = request.queryParams("filter_work");
+            String filterStudy = request.queryParams("filter_study");
+            String filterHome = request.queryParams("filter_sofa");
+            String filterEvent = request.queryParams("filter_event");
+            String filterShoplist = request.queryParams("filter_shoplist");
+            String filterRecipe = request.queryParams("filter_recipe");
+            String res = "";
+            if (filterWork != null)
+                res += "work";
+            if (filterStudy != null)
+                res += "study";
+            if (filterHome != null)
+                res += "sofa";
+            if (filterEvent != null)
+                res += "event";
+            if (filterShoplist != null)
+                res += "shoplist";
+            if (filterRecipe != null)
+                res += "recipe";
+            if (!res.equals(""))
+                setUserTypes(response, res);
+            response.redirect("/notes");
             return null;
         });
     }
