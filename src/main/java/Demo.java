@@ -1,11 +1,10 @@
-
 import spark.Filter;
 import spark.Request;
 import spark.Response;
-import spark.bd.Dao;
-import spark.bd.Db;
-import spark.bd.Note;
-import spark.bd.User;
+import bd.Dao;
+import bd.Db;
+import bd.Note;
+import bd.User;
 
 import java.io.IOException;
 import java.nio.file.Files;
