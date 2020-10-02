@@ -143,7 +143,7 @@ public class Demo {
     }
 
     private static void run() {
-        port(8080);
+//        port(8080);
         staticFiles.location("/public");
 
         Filter onlyForUsers = (request, response) -> {
