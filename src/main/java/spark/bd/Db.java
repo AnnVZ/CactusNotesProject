@@ -26,8 +26,11 @@ public class Db {
         Connection connection = null;
         Statement statement = null;
         try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:./db/db");
+//            Class.forName("org.h2.Driver");
+//            connection = DriverManager.getConnection("jdbc:h2:./db/db");
+            Class.forName("com.mysql.jdbc.Driver");
+//            connection = DriverManager.getConnection("jdbc:mysql://b054d4783a0d3e:86886655@us-cdbr-east.cleardb.com/heroku_86caf156694a1bb");
+            connection = DriverManager.getConnection("jdbc:mysql://eu-cdbr-west-03.cleardb.net/heroku_86caf156694a1bb", "b054d4783a0d3e", "86886655");
             statement = connection.createStatement();
             return function.apply(statement);
         } catch (Exception e) {

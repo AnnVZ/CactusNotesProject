@@ -1,6 +1,5 @@
 package spark.bd;
 
-import java.awt.image.DataBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +13,11 @@ public class Dao {
     public void createTables() {
 //        db.executeUpdate("DROP TABLE IF EXISTS my_users;");
 //        db.executeUpdate("DROP TABLE IF EXISTS notes;");
-        db.executeUpdate("CREATE TABLE IF NOT EXISTS my_users(id IDENTITY(1,1) NOT NULL PRIMARY KEY, name VARCHAR(30) NOT NULL UNIQUE, email VARCHAR(30) UNIQUE, password VARCHAR(30) NOT NULL);");
-        db.executeUpdate("CREATE TABLE IF NOT EXISTS notes(id IDENTITY NOT NULL PRIMARY KEY, topic VARCHAR(25), text VARCHAR(1000) NOT NULL, importance BIGINT NOT NULL, datetime VARCHAR(20), form VARCHAR(10) NOT NULL, type VARCHAR(20) NOT NULL, user_id BIGINT NOT NULL);");
-        db.executeUpdate("ALTER TABLE IF EXISTS notes ADD CONSTRAINT IF NOT EXISTS fk_user_id FOREIGN KEY (user_id) REFERENCES my_users(id) ON DELETE CASCADE;");
+//        db.executeUpdate("CREATE TABLE IF NOT EXISTS my_users(id IDENTITY(1,1) NOT NULL PRIMARY KEY, name VARCHAR(30) NOT NULL UNIQUE, email VARCHAR(30) UNIQUE, password VARCHAR(30) NOT NULL);");
+//        db.executeUpdate("CREATE TABLE IF NOT EXISTS notes(id IDENTITY NOT NULL PRIMARY KEY, topic VARCHAR(25), text VARCHAR(1000) NOT NULL, importance BIGINT NOT NULL, datetime VARCHAR(20), form VARCHAR(10) NOT NULL, type VARCHAR(20) NOT NULL, user_id BIGINT NOT NULL);");
+//        db.executeUpdate("ALTER TABLE IF EXISTS notes ADD CONSTRAINT IF NOT EXISTS fk_user_id FOREIGN KEY (user_id) REFERENCES my_users(id) ON DELETE CASCADE;");
+        db.executeUpdate("CREATE TABLE IF NOT EXISTS my_users(id BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY, name VARCHAR(30) NOT NULL UNIQUE, email VARCHAR(30) UNIQUE, password VARCHAR(30) NOT NULL);");
+        db.executeUpdate("CREATE TABLE IF NOT EXISTS notes(id BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY, topic VARCHAR(25), text VARCHAR(1000) NOT NULL, importance BIGINT NOT NULL, datetime VARCHAR(20), form VARCHAR(10) NOT NULL, type VARCHAR(20) NOT NULL, user_id BIGINT NOT NULL, CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES my_users(id));");
     }
 
     public void insertUser(String name, String email, String password) {
