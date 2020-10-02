@@ -1,1 +1,1 @@
-web:    java $JAVA_OPTS -cp target/classes:target/dependency/* spark.Demo
+web:    java $JAVA_OPTS -cp target/classes:target/dependency/* Demo
