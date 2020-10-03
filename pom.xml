@@ -43,7 +43,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>fully.qualified.MainClass</mainClass>
+                            <mainClass>Demo</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
