@@ -197,6 +197,7 @@ public class Demo {
             response.removeCookie("userTypes");
             response.removeCookie("userSearch");
             response.redirect("signin.html");
+            halt();
             return null;
         });
 
